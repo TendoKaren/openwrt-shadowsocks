@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=shadowsocks-libev
+PKG_NAME:=shadowsocks-libev-mod
 PKG_VERSION:=3.3.5
 PKG_RELEASE:=1
 
@@ -39,7 +39,7 @@ PKG_CONFIG_DEPENDS:= \
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/shadowsocks-libev
+define Package/shadowsocks-libev-mod
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=Lightweight Secured Socks5 Proxy
@@ -52,11 +52,11 @@ define Package/shadowsocks-libev
 		+!SHADOWSOCKS_WITH_MBEDTLS:libmbedtls
 endef
 
-Package/shadowsocks-libev-server = $(Package/shadowsocks-libev)
+Package/shadowsocks-libev-mod-server = $(Package/shadowsocks-libev-mod)
 
-define Package/shadowsocks-libev-server/config
+define Package/shadowsocks-libev-mod-server/config
 menu "Shadowsocks-libev Compile Configuration"
-	depends on PACKAGE_shadowsocks-libev || PACKAGE_shadowsocks-libev-server
+	depends on PACKAGE_shadowsocks-libev-mod || PACKAGE_shadowsocks-libev-mod-server
 	config SHADOWSOCKS_STATIC_LINK
 		bool "enable static link libraries."
 		default n
@@ -86,11 +86,11 @@ menu "Shadowsocks-libev Compile Configuration"
 endmenu
 endef
 
-define Package/shadowsocks-libev/description
+define Package/shadowsocks-libev-mod/description
 Shadowsocks-libev is a lightweight secured socks5 proxy for embedded devices and low end boxes.
 endef
 
-Package/shadowsocks-libev-server/description = $(Package/shadowsocks-libev/description)
+Package/shadowsocks-libev-mod-server/description = $(Package/shadowsocks-libev-mod/description)
 
 CONFIGURE_ARGS += \
 	--disable-ssp \
@@ -116,15 +116,15 @@ ifeq ($(CONFIG_SHADOWSOCKS_STATIC_LINK),y)
 	CONFIGURE_ARGS += LDFLAGS="-Wl,-static -static -static-libgcc"
 endif
 
-define Package/shadowsocks-libev/install
+define Package/shadowsocks-libev-mod/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ss-{local,redir,tunnel} $(1)/usr/bin
 endef
 
-define Package/shadowsocks-libev-server/install
+define Package/shadowsocks-libev-mod-server/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ss-server $(1)/usr/bin
 endef
 
-$(eval $(call BuildPackage,shadowsocks-libev))
-$(eval $(call BuildPackage,shadowsocks-libev-server))
+$(eval $(call BuildPackage,shadowsocks-libev-mod))
+$(eval $(call BuildPackage,shadowsocks-libev-mod-server))
